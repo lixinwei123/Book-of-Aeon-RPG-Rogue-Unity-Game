@@ -1,0 +1,6 @@
+sceneSetups:
+- path: Assets/Cainos/Customizable Pixel Character/Scene/SC Customizable Pixel Character
+    - Demo.unity
+  isLoaded: 1
+  isActive: 1
+  isSubScene: 0
