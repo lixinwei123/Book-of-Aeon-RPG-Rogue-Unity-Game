@@ -13,8 +13,8 @@ TagManager:
   - Water
   - UI
   - character
-  - 
-  - 
+  - enemy
+  - died
   - 
   - 
   - 
@@ -53,4 +53,7 @@ TagManager:
     locked: 0
   - name: front2
     uniqueID: 922525705
+    locked: 0
+  - name: player
+    uniqueID: 332767745
     locked: 0

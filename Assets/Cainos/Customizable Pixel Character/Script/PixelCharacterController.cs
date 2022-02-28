@@ -10,7 +10,7 @@ namespace Cainos.CustomizablePixelCharacter
         const float GROUND_CHECK_RADIUS = 0.1f;                 // radius of the overlap circle to determine if the character is on ground
 
         public MovementType defaultMovement = MovementType.Walk;
-
+        
         public KeyCode leftKey = KeyCode.A;
         public KeyCode rightKey = KeyCode.D;
         public KeyCode crouchKey = KeyCode.S;
@@ -40,7 +40,7 @@ namespace Cainos.CustomizablePixelCharacter
         public float fallGravityMutiplier = 1.3f;               // gravity multiplier when character is falling, should be equal or greater than 1.0
 
         public float groundCheckRadius = 0.17f;                 // radius of the circle at the character's bottom to determine whether the character is on ground
-
+        
         [ExposeProperty]                                        // is the character dead? if dead, plays dead animation and disable control
         public bool IsDead
         {
@@ -54,7 +54,7 @@ namespace Cainos.CustomizablePixelCharacter
         }                    
         private bool isDead;
 
-
+        private float attackSpeed = 0.5f;
         private PixelCharacter fx;                              // the FXCharacter script attached the character
         private CapsuleCollider2D collider2d;                   // Collider compoent on the character
         private Rigidbody2D rb2d;                               // Rigidbody2D component on the character
@@ -65,7 +65,9 @@ namespace Cainos.CustomizablePixelCharacter
         private float jumpTimer;                                // timer for jump cooldown
         private Vector2 posBot;                                 // local position of the character's middle bottom
         private Vector2 posTop;                                 // local position of the character's middle top
-
+        private float timeToFire;
+        private float health = 100;
+       // private Hashtable enemies = new Hashtable();
         private void Awake()
         {
             fx = GetComponent<PixelCharacter>();
@@ -77,12 +79,26 @@ namespace Cainos.CustomizablePixelCharacter
         {
             posBot = collider2d.offset - new Vector2 ( 0.0f , collider2d.size.y * 0.5f );
             posTop = collider2d.offset + new Vector2( 0.0f, collider2d.size.y * 0.5f );
+            timeToFire = 0f;
         }
 
+        
+
+        public void TakeDammage(float dammage)
+        {
+            health -= dammage;
+        }
         private void Update()
         {
             if (jumpTimer < jumpCooldown) jumpTimer += Time.deltaTime;
-
+            Debug.Log(health);
+            if (health <= 0)
+            {
+                isDead = true;
+                fx.IsDead = isDead;
+                fx.DropWeapon();
+                return;
+            }
             //RECEIVE INPUT
             bool inputCrounch = false;
             bool inputMoveModifier = false;
@@ -115,6 +131,7 @@ namespace Cainos.CustomizablePixelCharacter
             Move(inputH, inputCrounch, inputRun, inputJump);
             Attack(inputAttack, inputAttackContinuous);
 
+           
 
             //CHECK IF THE CHARACTER IS ON GROUND
             isGrounded = false;
@@ -127,16 +144,55 @@ namespace Cainos.CustomizablePixelCharacter
             }
         }
 
+        IEnumerator AttackDelayCoroutine(Cainos.PixelArtMonster_Dungeon.MonsterInputMouseAndKeyboard script1, Cainos.PixelArtMonster_Dungeon.PixelMonster script2,float prevX)
+        {
+            yield return new WaitForSeconds(0.45f);
+            script2.InjuredFront();
+            script1.health -= 20;
+            script1.inputMove.x = prevX;
+            script1.timeToFire = script1.attackSpeed;
+        }
         public void Attack( bool inputAttack , bool inputAttackContinuous)
         {
-            if ( inputAttack ) fx.Attack();
-            fx.IsAttacking = inputAttackContinuous;
+            //fx.Facing 1 is to the right, -1 is left
+            timeToFire -= Time.deltaTime;
+            //print(timeToFire);
+            if (inputAttack && timeToFire <= 0f)
+            {
+                fx.Attack();
+                timeToFire = attackSpeed;
+                Hashtable enemies = gameObject.transform.GetChild(2).GetComponent<AttackRangeController>().enemies;
+                foreach(DictionaryEntry s in enemies)
+                {
+                    GameObject obj = (GameObject) s.Value;
+                    var script = obj.GetComponent<Cainos.PixelArtMonster_Dungeon.MonsterInputMouseAndKeyboard>();
+                    var script2 = obj.GetComponent<Cainos.PixelArtMonster_Dungeon.PixelMonster>();
+                    float previousMoveX = script.inputMove.x;
+                    script.inputMove.x = 0f;
+                    if (script.isLeft && fx.Facing == -1)
+                    {
+                        StartCoroutine(AttackDelayCoroutine(script,script2, previousMoveX));
+                        //script2.InjuredFront();
+                      //  script2.InjuredFront();
+                    }
+                    else if(!script.isLeft && fx.Facing == 1)
+                    {
+             
+                        StartCoroutine(AttackDelayCoroutine(script,script2, previousMoveX));
+                        //script2.InjuredFront(script2);
+                     //   script2.InjuredFront();
+                    }
+                    
+
+                }
+            }
+            //fx.IsAttacking = inputAttackContinuous;
         }
 
         public void Move(float inputH, bool inputCrouch, bool inputRunning, bool inputJump)
         {
             if (isDead) return;
-
+            
             //GET CURRENT SPEED FROM RIGIDBODY
             curVel = rb2d.velocity;
 
