@@ -28,12 +28,13 @@ public class ZombieSpawn : MonoBehaviour
             {
                 nextActionTime = Time.time + period;
                 var RandomOption = Random.Range(0, enemies.Length);
-                period = Random.Range(1, 5);
+                period = Random.Range(2, 5);
                 var enemy = enemies[RandomOption].gameObject.GetComponent<Cainos.PixelArtMonster_Dungeon.MonsterInputMouseAndKeyboard>();
                 enemy.isLeft = isLeft;
                 enemy.player = player;
                 enemy.gameObject.layer = 7;
                 enemy.jumpKey = KeyCode.None;
+                enemy.timeToFire = 0.3f;
                 GameObject instantiated = (GameObject)Instantiate(enemies[RandomOption], gameObject.transform.position, Quaternion.identity);
                 enemyCounter += 1;
                 instantiated.name = instantiated.name + enemyCounter.ToString();

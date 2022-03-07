@@ -111,12 +111,13 @@ MonoBehaviour:
   rightKey: 100
   jumpKey: 0
   moveModifierKey: 304
+  attackDelayTime: 0.45
   attackKey: 323
-  isLeft: 1
+  isLeft: 0
   attackSpeed: 1
   player: {fileID: 0}
   inputMove: {x: 0, y: 0}
-  timeToFire: 0
+  timeToFire: 0.3
   health: 100
   attackDammage: 10
   monsterScore: 500

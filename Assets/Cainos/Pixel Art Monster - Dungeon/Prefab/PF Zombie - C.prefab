@@ -64,6 +64,10 @@ PrefabInstance:
       value: PF Zombie - C
       objectReference: {fileID: 0}
     - target: {fileID: 8654052941439035612, guid: 971323aa7af9c364fbd2b11cf347872d, type: 3}
+      propertyPath: isLeft
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8654052941439035612, guid: 971323aa7af9c364fbd2b11cf347872d, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 0}

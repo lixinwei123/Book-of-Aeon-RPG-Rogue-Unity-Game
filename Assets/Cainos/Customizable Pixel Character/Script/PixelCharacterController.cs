@@ -163,16 +163,47 @@ namespace Cainos.CustomizablePixelCharacter
         IEnumerator AttackDelayCoroutine(Cainos.PixelArtMonster_Dungeon.MonsterInputMouseAndKeyboard script1, Cainos.PixelArtMonster_Dungeon.PixelMonster script2,float prevX)
         {
             yield return new WaitForSeconds(0.45f);
-            script2.InjuredFront();
             script1.health -= 40;
             if (script1.health > 0)
             {
                 script1.KnockBack();
+                script2.InjuredFront();
             }
             else { }
           
             script1.inputMove.x = prevX;
             script1.timeToFire = script1.attackSpeed;
+        }
+
+        IEnumerator AttackDelayCoroutine2()
+        {
+            yield return new WaitForSeconds(0.45f);
+            Hashtable enemies = gameObject.transform.GetChild(2).GetComponent<AttackRangeController>().enemies;
+            foreach (DictionaryEntry s in enemies)
+            {
+                GameObject obj = (GameObject)s.Value;
+
+                var script1 = obj.GetComponent<Cainos.PixelArtMonster_Dungeon.MonsterInputMouseAndKeyboard>();
+                var script2 = obj.GetComponent<Cainos.PixelArtMonster_Dungeon.PixelMonster>();
+                float prevX = script1.inputMove.x;
+
+                script1.inputMove.x = 0f;
+                if (script1.isLeft && fx.Facing == -1 || !script1.isLeft && fx.Facing == 1)
+                {
+                    script1.health -= 40;
+                    if (script1.health > 0)
+                    {
+                        script1.KnockBack();
+                        script2.InjuredFront();
+                    }
+                    else { }
+
+                    script1.inputMove.x = prevX;
+                    script1.timeToFire = script1.attackSpeed;
+                }
+
+            }
+      
         }
         public void Attack( bool inputAttack , bool inputAttackContinuous)
         {
@@ -182,7 +213,9 @@ namespace Cainos.CustomizablePixelCharacter
             if (inputAttack && timeToFire <= 0f)
             {
                 fx.Attack();
+                StartCoroutine(AttackDelayCoroutine2());
                 timeToFire = attackSpeed;
+                /*
                 Hashtable enemies = gameObject.transform.GetChild(2).GetComponent<AttackRangeController>().enemies;
                 foreach(DictionaryEntry s in enemies)
                 {
@@ -209,6 +242,7 @@ namespace Cainos.CustomizablePixelCharacter
                     
 
                 }
+                */
             }
             //fx.IsAttacking = inputAttackContinuous;
         }

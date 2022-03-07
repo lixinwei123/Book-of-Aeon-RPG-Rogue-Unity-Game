@@ -1,26 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &9069931715771521829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 585657671659741440}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df24e6268e38ccd4ea11123551ddd708, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onFootstep:
-    m_PersistentCalls:
-      m_Calls: []
-  onAttack:
-    m_PersistentCalls:
-      m_Calls: []
-  onDieFx:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &3273370572504723094
 GameObject:
   m_ObjectHideFlags: 0
@@ -35,7 +14,7 @@ GameObject:
   - component: {fileID: 1398595558767474385}
   - component: {fileID: 5218067878039927586}
   - component: {fileID: 2025350193268905450}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PF Knight - Normal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +71,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultMovement: 0
-  walkSpeedMax: 0.9
+  walkSpeedMax: 0.4
   walkAcc: 7
   runSpeedMax: 2
   runAcc: 9
@@ -113,6 +92,7 @@ MonoBehaviour:
   inputMoveModifier: 0
   inputJump: 0
   inputAttack: 0
+  isKnockBack: 0
 --- !u!114 &1398595558767474385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,9 +109,18 @@ MonoBehaviour:
   downKey: 115
   leftKey: 97
   rightKey: 100
-  jumpKey: 32
+  jumpKey: 0
   moveModifierKey: 304
+  attackDelayTime: 0.2
   attackKey: 323
+  isLeft: 1
+  attackSpeed: 1
+  player: {fileID: 0}
+  inputMove: {x: 0, y: 0}
+  timeToFire: 0.3
+  health: 200
+  attackDammage: 25
+  monsterScore: 2000
 --- !u!50 &5218067878039927586
 Rigidbody2D:
   serializedVersion: 4
@@ -366,25 +355,42 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: f5279562ade20de4eb7e7699463fa63d, type: 3}
 --- !u!1 &585657671659741440 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 100000, guid: f5279562ade20de4eb7e7699463fa63d,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 100000, guid: f5279562ade20de4eb7e7699463fa63d, type: 3}
   m_PrefabInstance: {fileID: 585657671659775904}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &585657671659912480 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 400000, guid: f5279562ade20de4eb7e7699463fa63d,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 400000, guid: f5279562ade20de4eb7e7699463fa63d, type: 3}
   m_PrefabInstance: {fileID: 585657671659775904}
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &585657671669224128 stripped
 Animator:
-  m_CorrespondingSourceObject: {fileID: 9500000, guid: f5279562ade20de4eb7e7699463fa63d,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 9500000, guid: f5279562ade20de4eb7e7699463fa63d, type: 3}
   m_PrefabInstance: {fileID: 585657671659775904}
   m_PrefabAsset: {fileID: 0}
 --- !u!137 &585657671664954492 stripped
 SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 13700060, guid: f5279562ade20de4eb7e7699463fa63d,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 13700060, guid: f5279562ade20de4eb7e7699463fa63d, type: 3}
   m_PrefabInstance: {fileID: 585657671659775904}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9069931715771521829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 585657671659741440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df24e6268e38ccd4ea11123551ddd708, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onFootstep:
+    m_PersistentCalls:
+      m_Calls: []
+  onAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  onDieFx:
+    m_PersistentCalls:
+      m_Calls: []

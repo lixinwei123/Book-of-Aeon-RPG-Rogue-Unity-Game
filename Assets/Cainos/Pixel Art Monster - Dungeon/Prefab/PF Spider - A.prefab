@@ -1,26 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &8489741170629696968
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1495368543900481661}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df24e6268e38ccd4ea11123551ddd708, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onFootstep:
-    m_PersistentCalls:
-      m_Calls: []
-  onAttack:
-    m_PersistentCalls:
-      m_Calls: []
-  onDieFx:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &7181225315800715220
 GameObject:
   m_ObjectHideFlags: 0
@@ -35,7 +14,7 @@ GameObject:
   - component: {fileID: 4451248478755658984}
   - component: {fileID: 3909094694849148257}
   - component: {fileID: 9042514733112480222}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PF Spider - A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +71,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultMovement: 0
-  walkSpeedMax: 1.2
+  walkSpeedMax: 3
   walkAcc: 15
   runSpeedMax: 2.2
   runAcc: 15
@@ -113,6 +92,7 @@ MonoBehaviour:
   inputMoveModifier: 0
   inputJump: 0
   inputAttack: 0
+  isKnockBack: 0
 --- !u!114 &4451248478755658984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,9 +109,18 @@ MonoBehaviour:
   downKey: 115
   leftKey: 97
   rightKey: 100
-  jumpKey: 32
+  jumpKey: 0
   moveModifierKey: 304
+  attackDelayTime: 0.7
   attackKey: 323
+  isLeft: 0
+  attackSpeed: 1.5
+  player: {fileID: 0}
+  inputMove: {x: 0, y: 0}
+  timeToFire: 0.3
+  health: 40
+  attackDammage: 5
+  monsterScore: 250
 --- !u!61 &3909094694849148257
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -145,7 +134,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0024044514, y: 0.35241252}
+  m_Offset: {x: -0.0865815, y: 0.35241252}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -156,7 +145,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.53353167, y: 0.7039362}
+  m_Size: {x: 1.2941375, y: 0.7039362}
   m_EdgeRadius: 0
 --- !u!50 &9042514733112480222
 Rigidbody2D:
@@ -170,7 +159,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 2
+  m_Mass: 40
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
@@ -250,19 +239,37 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 825757c7da4f7bc428caab2d5bb543ea, type: 3}
 --- !u!1 &1495368543900481661 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 100004, guid: 825757c7da4f7bc428caab2d5bb543ea,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 100004, guid: 825757c7da4f7bc428caab2d5bb543ea, type: 3}
   m_PrefabInstance: {fileID: 1495368543900450521}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1495368543900574813 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 400004, guid: 825757c7da4f7bc428caab2d5bb543ea,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 400004, guid: 825757c7da4f7bc428caab2d5bb543ea, type: 3}
   m_PrefabInstance: {fileID: 1495368543900450521}
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &1495368543907761081 stripped
 Animator:
-  m_CorrespondingSourceObject: {fileID: 9500000, guid: 825757c7da4f7bc428caab2d5bb543ea,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 9500000, guid: 825757c7da4f7bc428caab2d5bb543ea, type: 3}
   m_PrefabInstance: {fileID: 1495368543900450521}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8489741170629696968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495368543900481661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df24e6268e38ccd4ea11123551ddd708, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onFootstep:
+    m_PersistentCalls:
+      m_Calls: []
+  onAttack:
+    m_PersistentCalls:
+      m_Calls: []
+  onDieFx:
+    m_PersistentCalls:
+      m_Calls: []

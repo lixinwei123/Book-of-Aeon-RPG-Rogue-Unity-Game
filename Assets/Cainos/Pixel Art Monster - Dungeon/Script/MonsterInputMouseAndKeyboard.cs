@@ -16,7 +16,7 @@ namespace Cainos.PixelArtMonster_Dungeon
 
         public KeyCode jumpKey = KeyCode.Space;
         public KeyCode moveModifierKey = KeyCode.LeftShift;
-
+        public float attackDelayTime = 0.45f;
         public KeyCode attackKey = KeyCode.Mouse0;
         public bool isLeft = false;
         public float attackSpeed = 1.0f;
@@ -38,7 +38,6 @@ namespace Cainos.PixelArtMonster_Dungeon
         {
             controller = GetComponent<MonsterController>();
             controllerFlying = GetComponent<MonsterFlyingController>();
-            timeToFire = 0f;
            // gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
  
         }
