@@ -67,12 +67,16 @@ namespace Cainos.CustomizablePixelCharacter
         private Vector2 posTop;                                 // local position of the character's middle top
         private float timeToFire;
         private float health = 100;
+        private GameObject winning;
+        private GameObject losing;
+        private GameObject startOver;
        // private Hashtable enemies = new Hashtable();
         private void Awake()
         {
             fx = GetComponent<PixelCharacter>();
             collider2d = GetComponent<CapsuleCollider2D>();
             rb2d = GetComponent<Rigidbody2D>();
+          
         }
 
         private void Start()
@@ -80,6 +84,12 @@ namespace Cainos.CustomizablePixelCharacter
             posBot = collider2d.offset - new Vector2 ( 0.0f , collider2d.size.y * 0.5f );
             posTop = collider2d.offset + new Vector2( 0.0f, collider2d.size.y * 0.5f );
             timeToFire = 0f;
+            winning = GameObject.Find("Winning");
+            losing = GameObject.Find("Losing");
+            startOver = GameObject.Find("StartOver");
+            winning.SetActive(false);
+            losing.SetActive(false);
+           // startOver.SetActive(false);
         }
 
         
@@ -87,15 +97,21 @@ namespace Cainos.CustomizablePixelCharacter
         public void TakeDammage(float dammage)
         {
             health -= dammage;
+            GameObject healthBar = GameObject.Find("HealthBar");
+            healthBar.GetComponent<HealthBar>().SetHealth(health);
         }
         private void Update()
         {
             if (jumpTimer < jumpCooldown) jumpTimer += Time.deltaTime;
-            Debug.Log(health);
             if (health <= 0)
             {
+              //  gameObject.transform.GetChild(1).gameObject.transform.GetChild(0).gameObject.layer = 8;
                 isDead = true;
                 fx.IsDead = isDead;
+                gameObject.layer = 8;
+                losing.SetActive(true);
+              //  startOver.SetActive(true);
+               // Time.timeScale = 0;
                 fx.DropWeapon();
                 return;
             }
@@ -148,7 +164,13 @@ namespace Cainos.CustomizablePixelCharacter
         {
             yield return new WaitForSeconds(0.45f);
             script2.InjuredFront();
-            script1.health -= 20;
+            script1.health -= 40;
+            if (script1.health > 0)
+            {
+                script1.KnockBack();
+            }
+            else { }
+          
             script1.inputMove.x = prevX;
             script1.timeToFire = script1.attackSpeed;
         }
@@ -165,9 +187,11 @@ namespace Cainos.CustomizablePixelCharacter
                 foreach(DictionaryEntry s in enemies)
                 {
                     GameObject obj = (GameObject) s.Value;
+     
                     var script = obj.GetComponent<Cainos.PixelArtMonster_Dungeon.MonsterInputMouseAndKeyboard>();
                     var script2 = obj.GetComponent<Cainos.PixelArtMonster_Dungeon.PixelMonster>();
                     float previousMoveX = script.inputMove.x;
+                    
                     script.inputMove.x = 0f;
                     if (script.isLeft && fx.Facing == -1)
                     {

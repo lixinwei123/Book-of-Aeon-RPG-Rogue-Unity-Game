@@ -38,7 +38,7 @@ namespace Cainos.PixelArtMonster_Dungeon
         public bool inputMoveModifier = false;                      // switch between walk and run
         public bool inputJump = false;                              // jump input
         public bool inputAttack = false;                            // attack input
-
+        public bool isKnockBack = false;
 
         [ExposeProperty]                                            // is the character dead? if dead, plays dead animation and disable control
         public bool IsDead
@@ -62,7 +62,7 @@ namespace Cainos.PixelArtMonster_Dungeon
         private float jumpCdTimer;                                  // timer for jump cooldown
         private float jumpDelayTimer;                               // timer for jump delay ( jump prepare animation)
         private bool isInJumpPrepare;                               // is the character in jump prepare animation
-
+        
         private Collider2D[] groundCheckResult = new Collider2D[2];
         private ContactFilter2D contactFilter2D = new ContactFilter2D();
 
@@ -157,7 +157,12 @@ namespace Cainos.PixelArtMonster_Dungeon
 
             //horizontal movement
             //has horizontal movement input
-            if (Mathf.Abs(inputH) > 0.01f)
+            float KnockBackRate = inputH >0 ? -16 : 16;
+            if (isKnockBack)
+            {
+                rb2d.AddForce(gameObject.transform.position.normalized * KnockBackRate, ForceMode2D.Impulse);
+            }
+           else if (Mathf.Abs(inputH) > 0.01f)
             {
                 isMoving = true;
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+using UnityEngine.UI;
 
 namespace Cainos.PixelArtMonster_Dungeon
 {
@@ -32,11 +32,14 @@ namespace Cainos.PixelArtMonster_Dungeon
         private bool foundPlayer = false;
         public float health = 100;
         public float attackDammage = 10;
+        public int monsterScore = 500;
+        private bool addedScore = false;
         private void Awake()
         {
             controller = GetComponent<MonsterController>();
             controllerFlying = GetComponent<MonsterFlyingController>();
             timeToFire = 0f;
+           // gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
  
         }
 
@@ -45,7 +48,7 @@ namespace Cainos.PixelArtMonster_Dungeon
         {
             if(collision.collider.gameObject == player)
             {
-                Debug.Log("hit player!");
+             //   Debug.Log("hit player!");
                 foundPlayer = true;
             }
         }
@@ -55,20 +58,37 @@ namespace Cainos.PixelArtMonster_Dungeon
         {
             if (collision.collider.gameObject == player)
             {
-                Debug.Log("done hitting player!");
+             //   Debug.Log("done hitting player!");
                 foundPlayer = false;
             }
         }
 
-        public void KnockBack()
+       public void KnockBack()
         {
-            controller.walkSpeedMax = 8f;
-            //inputMove.
+            float KnockBackRate = isLeft ? 220 : -220;
+            //controller.enabled = false;
+            if(transform.position.x < 0)
+            {
+                gameObject.GetComponent<Rigidbody2D>().AddForce(gameObject.transform.position.normalized * KnockBackRate, ForceMode2D.Impulse);
+            }
+            else
+            {
+                gameObject.GetComponent<Rigidbody2D>().AddForce(gameObject.transform.position.normalized * KnockBackRate * -1, ForceMode2D.Impulse);
+            }
+         
+            controller.isKnockBack = true;
+            StartCoroutine(KnockBackCoroutine());
+        }
+        public IEnumerator KnockBackCoroutine()
+        {
+
+            yield return new WaitForSeconds(0.30f);
+            controller.isKnockBack = false;
         }
         private IEnumerator SelfDestruct()
         {
-            yield return new WaitForSeconds(3f);
-            gameObject.active = false;
+            yield return new WaitForSeconds(5f);
+            Destroy(gameObject);
         }
 
         IEnumerator AttackDelayCoroutine(Cainos.CustomizablePixelCharacter.PixelCharacter script1, Cainos.CustomizablePixelCharacter.PixelCharacterController script2)
@@ -94,6 +114,13 @@ namespace Cainos.PixelArtMonster_Dungeon
             {
                 controller.IsDead = true;
                 gameObject.layer = 8;
+                if (!addedScore)
+                {
+                    var score = GameObject.Find("Score");
+                    score.GetComponent<Text>().text = (int.Parse(score.GetComponent<Text>().text) + monsterScore).ToString();
+                    addedScore = true;
+                }
+             
                 StartCoroutine(SelfDestruct());
             }
             if (!pointerOverUI)
@@ -130,7 +157,7 @@ namespace Cainos.PixelArtMonster_Dungeon
                 inputMove.x = 0f;
                 if (timeToFire <= 0f)
                 {
-                    Debug.Log("attack!");
+                 //   Debug.Log("attack!");
                     timeToFire = attackSpeed;
                     var script1 = player.GetComponent<Cainos.CustomizablePixelCharacter.PixelCharacter>();
                     var script2 = player.GetComponent<Cainos.CustomizablePixelCharacter.PixelCharacterController>();

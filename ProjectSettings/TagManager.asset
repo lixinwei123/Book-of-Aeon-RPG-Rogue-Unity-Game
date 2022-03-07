@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - New tag
+  - SpawnPoints
   layers:
   - Default
   - TransparentFX
@@ -15,8 +16,8 @@ TagManager:
   - character
   - enemy
   - died
-  - 
-  - 
+  - wall
+  - Field of Vision
   - 
   - 
   - 
